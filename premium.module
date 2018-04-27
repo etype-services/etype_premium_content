@@ -159,9 +159,9 @@ function premium_form_alter(&$form, $form_state, $form_id) {
     if (isset($form['type']['#value']) && $form['type']['#value'] . '_node_form' == $form_id) {
         if (user_access('administer node premium status')) {
             $node = $form['#node'];
-            $premium_level = premium_node_level_data($node);
             if (isset($node->nid)) {
 
+                $premium_level = premium_node_level_data($node);
                 /* get rid of error on node edit pages --  not sure why no $premium_level['machine_name'] */
                 if (! isset($premium_level['machine_name'])) {
                     $premium_level['machine_name'] = 'default';
@@ -169,7 +169,8 @@ function premium_form_alter(&$form, $form_state, $form_id) {
                 $default = is_array($premium_level) ? $premium_level['machine_name'] : 'default';
             }
             else {
-                $default = 'default';
+                $default = variable_get("premium_{$node->type}", 'default');
+                // $default = 'default';
             }
 
             $form['options']['premium'] = array(
@@ -469,7 +470,7 @@ function premium_user_content_access($node, $account = NULL) {
  * @param stdClass $node
  *   The node to set status for. Only nid and created attributes are
  *   used, so a full node object is not required.
- * @param string $machine_name
+ * @param $machine_name
  *   Machine name of the premium level we want to set.
  */
 function _premium_set_premium($node, $machine_name = FALSE) {
