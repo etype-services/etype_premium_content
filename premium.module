@@ -207,12 +207,11 @@ function premium_ctools_plugin_directory($module, $plugin) {
 
 /**
  * Implements hook_default_premium_levels().
- *
+
  * Provide a default Premium level.
  */
 function premium_default_premium_levels() {
     $export = array();
-
     $preset = new stdClass();
     $preset->api_version = 1;
     $preset->name = 'Premium content';
@@ -223,9 +222,7 @@ function premium_default_premium_levels() {
     $preset->denied_message = t('Full text available to premium subscribers only.');
     $preset->denied_message_format = filter_fallback_format();
     $preset->wordcount = 0;
-
     $export['default'] = $preset;
-
     return $export;
 }
 
