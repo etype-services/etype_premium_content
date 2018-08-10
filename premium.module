@@ -231,9 +231,8 @@ function premium_default_premium_levels() {
 
 /**
  * Load a premium level based on machine name.
- *
- * @param string $machine_name
- *   The machine name of the premium level to load.
+ * @param string $machine_name The machine name of the premium level to load.
+ * @return false|string
  */
 function premium_level_load($machine_name) {
     ctools_include('export');
