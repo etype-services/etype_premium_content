@@ -515,6 +515,7 @@ function premium_theme() {
 function theme_premium_body($arguments) {
     drupal_add_css(drupal_get_path('module', 'premium') . '/css/premium.css');
     $node = $arguments['node'];
+    var_dump($node);
     $node->title = '';
     node_build_content($node, 'teaser');
     $level = premium_level_load($node->premium);
