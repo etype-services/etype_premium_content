@@ -536,11 +536,9 @@ function premium_theme()
 /**
  * Reformat the message body with a premium content message.
  */
-function theme_premium_body($arguments)
-{
+function theme_premium_body($arguments): string {
     drupal_add_css(drupal_get_path('module', 'premium') . '/css/premium.css');
     $node = $arguments['node'];
-    $node->title = '';
     node_build_content($node, 'teaser');
     $level = premium_level_load($node->premium);
     if ($level->denied_message) {
@@ -551,39 +549,20 @@ function theme_premium_body($arguments)
         $denied_message_format = variable_get('premium_format');
     }
 
-    switch ($node->type) {
-        case 'fotoname'; // for jailbirds
-            $uri = $node->field_image['und'][0]['uri'];
-            $name = $node->field_name['und'][0]['value'];
-            $wrapper = file_stream_wrapper_get_instance_by_uri($uri);
-            $path = $wrapper->getDirectoryPath() . "/" . file_uri_target($uri);
-            return '
-<div class="premium-message">
-    <div class="image"><img alt="' . $name . '" src="' . $path . '" /></div>
-    <div class="name">' . $name . '</div>
-    ' . check_markup($denied_message, $denied_message_format) . '
-</div>
-';
-            break;
-
-        default;
-
-            if (!empty($node->content['body'])) {
-                $text = $node->content['body']['#object']->body['und'][0]['value'];
-                if ($level->wordcount > 0) {
-                    $cut = '<div id="premium-content-teaser"><p>';
-                    $tmp = strip_tags($text);
-                    $words = implode(" ", array_slice(explode(" ", $tmp), 0, $level->wordcount));
-                    if (preg_match("/[.!?,;:]$/", $words)) {
-                        $cut .= $words;
-                    } else {
-                        $cut .= $words . ' ...';
-                    }
-                    $cut .= '</p></div>';
-                } else {
-                    $cut = '';
-                }
-                return '<div class="premium-message">' . $cut . check_markup($denied_message, $denied_message_format) . '</div>';
-            }
+  if (!empty($node->content['body'])) {
+    $text = $node->content['body']['#object']->body['und'][0]['value'];
+    $cut = '';
+    if ($level->wordcount > 0) {
+      $cut = '<div id="premium-content-teaser"><p>';
+      $tmp = strip_tags($text);
+      $words = implode(" ", array_slice(explode(" ", $tmp), 0, $level->wordcount));
+      if (preg_match("/[.!?,;:]$/", $words)) {
+        $cut .= $words;
+      } else {
+        $cut .= $words . ' ...';
+      }
+      $cut .= '</p></div>';
     }
+    return '<div class="premium-message">' . $cut . check_markup($denied_message, $denied_message_format) . '</div>';
+  }
 }

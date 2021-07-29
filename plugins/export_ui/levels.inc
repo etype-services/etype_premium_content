@@ -104,6 +104,7 @@ function premium_levels_ctools_export_ui_form(&$form, &$form_state) {
             '20' => t('20'),
             '50' => t('50'),
             '100' => t('100'),
+            '400' => t('400'),
         ),
     );
 
